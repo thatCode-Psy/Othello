@@ -36,11 +36,13 @@ public class BoardScript : MonoBehaviour {
             System.Type scriptType = System.Reflection.Assembly.GetExecutingAssembly().GetType(playerOneScriptClassName);
             System.Object o = Activator.CreateInstance(scriptType);
             playerOneScript = (AIScript)o;
+            playerOneScript.setColor(BoardSpace.BLACK);
         }
         if (isPlayerTwoAI) {
             System.Type scriptType = System.Reflection.Assembly.GetExecutingAssembly().GetType(playerTwoScriptClassName);
             System.Object o = Activator.CreateInstance(scriptType);
             playerTwoScript = (AIScript)o;
+            playerTwoScript.setColor(BoardSpace.WHITE);
         }
 
         InitBoard();

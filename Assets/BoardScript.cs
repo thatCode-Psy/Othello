@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public enum BoardSpace {
     EMPTY,
@@ -15,13 +16,38 @@ public class BoardScript : MonoBehaviour {
     GameObject[][] boardGameObjects;
     uint turnNumber;
     bool gameStarted;
+    bool gameEnded;
 
     List<KeyValuePair<int, int>> currentValidMoves;
 
+    public bool isPlayerOneAI;
+    public bool isPlayerTwoAI;
+
+    public string playerOneScriptClassName;
+    public string playerTwoScriptClassName;
+
+    
+    AIScript playerOneScript;
+    AIScript playerTwoScript;
+
+
     void Awake() {
+        if (isPlayerOneAI) {
+            System.Type scriptType = System.Reflection.Assembly.GetExecutingAssembly().GetType(playerOneScriptClassName);
+            System.Object o = Activator.CreateInstance(scriptType);
+            playerOneScript = (AIScript)o;
+        }
+        if (isPlayerTwoAI) {
+            System.Type scriptType = System.Reflection.Assembly.GetExecutingAssembly().GetType(playerTwoScriptClassName);
+            System.Object o = Activator.CreateInstance(scriptType);
+            playerTwoScript = (AIScript)o;
+        }
+
         InitBoard();
 
     }
+
+
 
     // Use this for initialization
     void Start() {
@@ -30,19 +56,28 @@ public class BoardScript : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (Input.GetMouseButtonUp(0)) {
-            Vector3 clickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-            if (clickPosition.y < 4.0 && clickPosition.y > -4.0 && clickPosition.x > -4.0 && clickPosition.x < 4.0) {
-                int clickX = Mathf.FloorToInt(clickPosition.x) + 4;
-                int clickY = Mathf.FloorToInt(clickPosition.y) + 4;
-                if (currentValidMoves.Contains(new KeyValuePair<int, int>(clickY, clickX))) {
-                    PlacePiece(clickX, clickY);
-                    
+        if (!gameEnded) {
+            if (turnNumber % 2 == 0 && isPlayerOneAI) {
+                KeyValuePair<int, int> move = playerOneScript.makeMove(currentValidMoves, board);
+                PlacePiece(move.Value, move.Key);
+            } else if (turnNumber % 2 == 1 && isPlayerTwoAI) {
+                KeyValuePair<int, int> move = playerTwoScript.makeMove(currentValidMoves, board);
+                PlacePiece(move.Value, move.Key);
+            } else {
+                if (Input.GetMouseButtonUp(0)) {
+                    Vector3 clickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+                    if (clickPosition.y < 4.0 && clickPosition.y > -4.0 && clickPosition.x > -4.0 && clickPosition.x < 4.0) {
+                        int clickX = Mathf.FloorToInt(clickPosition.x) + 4;
+                        int clickY = Mathf.FloorToInt(clickPosition.y) + 4;
+                        if (currentValidMoves.Contains(new KeyValuePair<int, int>(clickY, clickX))) {
+                            PlacePiece(clickX, clickY);
+
+                        }
+                    }
+
                 }
             }
-
         }
-
 
 
     }
@@ -198,7 +233,7 @@ public class BoardScript : MonoBehaviour {
         } else {
             print("Tie");
         }
-
+        gameEnded = true;
     }
 
 }

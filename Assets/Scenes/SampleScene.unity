@@ -244,6 +244,26 @@ Prefab:
       propertyPath: m_Color.b
       value: 0.754717
       objectReference: {fileID: 0}
+    - target: {fileID: 114610810491342564, guid: c1df6e61daa74ed4ebee0b9f869ebcbb,
+        type: 2}
+      propertyPath: isPlayerTwoAI
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114610810491342564, guid: c1df6e61daa74ed4ebee0b9f869ebcbb,
+        type: 2}
+      propertyPath: isPlayerOneAI
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114610810491342564, guid: c1df6e61daa74ed4ebee0b9f869ebcbb,
+        type: 2}
+      propertyPath: playerOneScriptClassName
+      value: RandomAI
+      objectReference: {fileID: 0}
+    - target: {fileID: 114610810491342564, guid: c1df6e61daa74ed4ebee0b9f869ebcbb,
+        type: 2}
+      propertyPath: playerTwoScriptClassName
+      value: RandomAI
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1df6e61daa74ed4ebee0b9f869ebcbb, type: 2}
   m_IsPrefabAsset: 0

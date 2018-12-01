@@ -63,8 +63,10 @@ public class BoardScript : MonoBehaviour {
                 KeyValuePair<int, int> move = playerOneScript.makeMove(currentValidMoves, board);
                 PlacePiece(move.Value, move.Key);
             } else if (turnNumber % 2 == 1 && isPlayerTwoAI) {
+               
                 KeyValuePair<int, int> move = playerTwoScript.makeMove(currentValidMoves, board);
                 PlacePiece(move.Value, move.Key);
+                
             } else {
                 if (Input.GetMouseButtonUp(0)) {
                     Vector3 clickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
@@ -227,7 +229,7 @@ public class BoardScript : MonoBehaviour {
                 }
             }
         }
-        
+        PrintBoardDebug();
         if(blackCount > whiteCount) {
             print("Black Wins!");
         } else if (blackCount < whiteCount) {
@@ -235,7 +237,20 @@ public class BoardScript : MonoBehaviour {
         } else {
             print("Tie");
         }
+        
         gameEnded = true;
+    }
+
+    void PrintBoardDebug() {
+        print("printBoard");
+        string boardRow = "";
+        foreach (BoardSpace[] row in board) {
+            foreach (BoardSpace space in row) {
+                boardRow += space + "\t";
+            }
+            print(boardRow);
+            boardRow = "";
+        }
     }
 
 }

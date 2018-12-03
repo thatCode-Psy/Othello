@@ -19,9 +19,10 @@ public class NegaMaxAI : AIScript {
                     maxChild = i;
                 }
             }
-            //Debug.Log(maxChildValue);
+            Debug.Log(maxChildValue);
             return availableMoves[maxChild];
         }
+       
         return availableMoves[Random.Range(0, availableMoves.Count)];
     }
 
@@ -93,9 +94,9 @@ public class NegaMaxAI : AIScript {
         foreach(BoardSpace[] row in currentBoard) {
             foreach(BoardSpace space in row) {
                 if(space == color) {
-                    totalDifference++;
-                } else if(space != BoardSpace.EMPTY) {
                     totalDifference--;
+                } else if(space != BoardSpace.EMPTY) {
+                    totalDifference++;
                 }
             }
         }

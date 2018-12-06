@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NegaMaxAI : AIScript {
 
-    public const int DEPTH = 5;
+    public const int DEPTH = 6;
 
     public override KeyValuePair<int, int> makeMove(List<KeyValuePair<int, int>> availableMoves, BoardSpace[][] currentBoard) {
 
@@ -93,10 +93,10 @@ public class NegaMaxAI : AIScript {
         int totalDifference = 0;
         foreach(BoardSpace[] row in currentBoard) {
             foreach(BoardSpace space in row) {
-                if(space == color) {
-                    totalDifference--;
-                } else if(space != BoardSpace.EMPTY) {
+                if(space == this.color) {
                     totalDifference++;
+                } else if(space != BoardSpace.EMPTY) {
+                    totalDifference--;
                 }
             }
         }

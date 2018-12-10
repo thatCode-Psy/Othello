@@ -19,7 +19,7 @@ public class NegaMaxAI : AIScript {
                     maxChild = i;
                 }
             }
-            Debug.Log(maxChildValue);
+            //Debug.Log(maxChildValue);
             return availableMoves[maxChild];
         }
        

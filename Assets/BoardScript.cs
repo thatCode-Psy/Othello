@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public enum BoardSpace {
     EMPTY,
     BLACK,
@@ -29,9 +30,13 @@ public class BoardScript : MonoBehaviour {
     
     AIScript playerOneScript;
     AIScript playerTwoScript;
-
-
+    public Text bText;
+    public Text wText;
+    public Text tText;
+    List<GameObject> possibleMovesArray;
+    bool posMovesShown;
     void Awake() {
+        possibleMovesArray = new List<GameObject>();
         if (isPlayerOneAI) {
             System.Type scriptType = System.Reflection.Assembly.GetExecutingAssembly().GetType(playerOneScriptClassName);
             System.Object o = Activator.CreateInstance(scriptType);
@@ -59,15 +64,36 @@ public class BoardScript : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         if (!gameEnded) {
+            if(turnNumber %2 == 0)
+            {
+                tText.text = "Current Turn: Black";
+            }
+            else
+            {
+                tText.text = "Current Turn: White";
+            }
             if (turnNumber % 2 == 0 && isPlayerOneAI) {
+
                 KeyValuePair<int, int> move = playerOneScript.makeMove(currentValidMoves, board);
                 PlacePiece(move.Value, move.Key);
             } else if (turnNumber % 2 == 1 && isPlayerTwoAI) {
-               
+
                 KeyValuePair<int, int> move = playerTwoScript.makeMove(currentValidMoves, board);
                 PlacePiece(move.Value, move.Key);
-                
+
             } else {
+                if (!posMovesShown)
+                {
+                    foreach (KeyValuePair<int, int> a in currentValidMoves)
+                    {
+                        GameObject piece = Instantiate(piecePrefab, transform);
+                        SpriteRenderer spriteR = piece.GetComponent<SpriteRenderer>();
+                        piece.transform.localPosition = new Vector3((float)a.Value - 3.5f, (float)a.Key - 3.5f, 0f);
+                        piece.GetComponent<SpriteRenderer>().color = Color.yellow;
+                        possibleMovesArray.Add(piece);
+                        posMovesShown = true;
+                    }
+                }
                 if (Input.GetMouseButtonUp(0)) {
                     Vector3 clickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
                     if (clickPosition.y < 4.0 && clickPosition.y > -4.0 && clickPosition.x > -4.0 && clickPosition.x < 4.0) {
@@ -75,7 +101,11 @@ public class BoardScript : MonoBehaviour {
                         int clickY = Mathf.FloorToInt(clickPosition.y) + 4;
                         if (currentValidMoves.Contains(new KeyValuePair<int, int>(clickY, clickX))) {
                             PlacePiece(clickX, clickY);
-
+                            foreach(GameObject a in possibleMovesArray)
+                            {
+                                Destroy(a);
+                                posMovesShown = false;
+                            }
                         }
                     }
 
@@ -109,6 +139,9 @@ public class BoardScript : MonoBehaviour {
         currentValidMoves = moves;
     }
 
+    public void restartGame() {
+        SceneManager.LoadScene(0);
+    }
     public void PlacePiece(int x, int y) {
         GameObject piece = Instantiate(piecePrefab, transform);
         SpriteRenderer spriteR = piece.GetComponent<SpriteRenderer>();
@@ -141,7 +174,25 @@ public class BoardScript : MonoBehaviour {
                 }
             }
         }
-
+        int blackCount = 0;
+        int whiteCount = 0;
+        foreach (BoardSpace[] row in board)
+        {
+            foreach (BoardSpace space in row)
+            {
+                switch (space)
+                {
+                    case (BoardSpace.BLACK):
+                        blackCount++;
+                        break;
+                    case (BoardSpace.WHITE):
+                        whiteCount++;
+                        break;
+                }
+            }
+        }
+        bText.text = "Black Score: " + blackCount;
+        wText.text = "White Score: " + whiteCount;
         ++turnNumber;
     }
 
@@ -231,14 +282,15 @@ public class BoardScript : MonoBehaviour {
         }
         PrintBoardDebug();
         if(blackCount > whiteCount) {
-            print("Black Wins!");
+            tText.text = "Black Wins!";
         } else if (blackCount < whiteCount) {
-            print("White Wins!");
+            tText.text = "White Wins!";
         } else {
-            print("Tie");
+            tText.text ="Tie";
         }
         
         gameEnded = true;
+      
     }
 
     void PrintBoardDebug() {

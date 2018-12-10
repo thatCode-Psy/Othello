@@ -280,7 +280,7 @@ public class BoardScript : MonoBehaviour {
                 }
             }
         }
-        PrintBoardDebug();
+        //PrintBoardDebug();
         if(blackCount > whiteCount) {
             tText.text = "Black Wins!";
         } else if (blackCount < whiteCount) {

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NegaMaxAI : AIScript {
 
-    public const int DEPTH = 6;
+    public const int DEPTH = 5;
 
     public override KeyValuePair<int, int> makeMove(List<KeyValuePair<int, int>> availableMoves, BoardSpace[][] currentBoard) {
 
@@ -93,19 +93,35 @@ public class NegaMaxAI : AIScript {
         int totalDifference = 0;
         foreach(BoardSpace[] row in currentBoard) {
             foreach(BoardSpace space in row) {
-                if(space == this.color) {
+                if(space == color) {
                     totalDifference++;
                 } else if(space != BoardSpace.EMPTY) {
                     totalDifference--;
                 }
             }
+        }// weighting corner pieces greater
+        if (currentBoard[0][0] == color)
+        {
+            totalDifference += 8;
+        }
+        if (currentBoard[7][0] == color)
+        {
+            totalDifference += 8;
+        }
+        if(currentBoard[7][7] == color)
+        {
+            totalDifference += 8;
+        }
+        if (currentBoard[0][7] == color)
+        {
+            totalDifference += 8;
         }
         if (isGameCompleted) {
             if(totalDifference > 0) {
-                return currentBoard.Length * currentBoard[0].Length;
+                return int.MaxValue;
             }
             if(totalDifference < 0) {
-                return currentBoard.Length * currentBoard[0].Length * -1;
+                return int.MinValue;
             }
         }
         return totalDifference;

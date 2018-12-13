@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NegaMaxAI : AIScript {
 
-    public const int DEPTH = 5;
+    public const int DEPTH = 2;
 
     public override KeyValuePair<int, int> makeMove(List<KeyValuePair<int, int>> availableMoves, BoardSpace[][] currentBoard) {
 
@@ -89,33 +89,56 @@ public class NegaMaxAI : AIScript {
         return BoardScript.GetValidMoves(node, 0).Count == 0 && BoardScript.GetValidMoves(node, 1).Count == 0;
     }
 
-    int EvaluationFunction(BoardSpace[][] currentBoard, BoardSpace color, bool isGameCompleted) {
+    int EvaluationFunction(BoardSpace[][] currentBoard, BoardSpace color, bool isGameCompleted)
+    {
         int totalDifference = 0;
-        foreach(BoardSpace[] row in currentBoard) {
-            foreach(BoardSpace space in row) {
-                if(space == color) {
+        foreach (BoardSpace[] row in currentBoard)
+        {
+            foreach (BoardSpace space in row)
+            {
+                if (space == color)
+                {
                     totalDifference++;
-                } else if(space != BoardSpace.EMPTY) {
+                }
+                else if (space != BoardSpace.EMPTY)
+                {
                     totalDifference--;
                 }
             }
         }// weighting corner pieces greater
         if (currentBoard[0][0] == color)
         {
-            totalDifference += 8;
+            totalDifference += 7;
+        }
+        else if (currentBoard[0][0] != BoardSpace.EMPTY)
+        {
+            totalDifference -= 8;
         }
         if (currentBoard[7][0] == color)
         {
-            totalDifference += 8;
+            totalDifference += 7;
         }
-        if(currentBoard[7][7] == color)
+        else if (currentBoard[7][0] != BoardSpace.EMPTY)
         {
-            totalDifference += 8;
+            totalDifference -= 8;
+        }
+        if (currentBoard[7][7] == color)
+        {
+            totalDifference += 7;
+        }
+        else if (currentBoard[7][7] != BoardSpace.EMPTY)
+        {
+            totalDifference -= 8;
         }
         if (currentBoard[0][7] == color)
         {
-            totalDifference += 8;
+            totalDifference += 7;
         }
+        else if (currentBoard[0][7] != BoardSpace.EMPTY)
+        {
+            totalDifference -= 8;
+        }
+        /*
         if (isGameCompleted) {
             if(totalDifference > 0) {
                 return int.MaxValue;
@@ -124,7 +147,8 @@ public class NegaMaxAI : AIScript {
                 return int.MinValue;
             }
         }
+        */
         return totalDifference;
     }
-
+    
 }

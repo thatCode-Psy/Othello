@@ -90,6 +90,7 @@ public class BoardScript : MonoBehaviour {
                         SpriteRenderer spriteR = piece.GetComponent<SpriteRenderer>();
                         piece.transform.localPosition = new Vector3((float)a.Value - 3.5f, (float)a.Key - 3.5f, 0f);
                         piece.GetComponent<SpriteRenderer>().color = Color.yellow;
+                        piece.transform.localScale = new Vector3(.4f, .4f);
                         possibleMovesArray.Add(piece);
                         posMovesShown = true;
                     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NegaMaxAI : AIScript {
 
-    public const int DEPTH = 3;
+    public const int DEPTH = 5;
 
     public override KeyValuePair<int, int> makeMove(List<KeyValuePair<int, int>> availableMoves, BoardSpace[][] currentBoard) {
 
@@ -18,16 +18,17 @@ public class NegaMaxAI : AIScript {
                     maxChildValue = value;
                     maxChild = i;
                 }
-                else if (maxChildValue == value && Random.Range(0,1f) <= .30)
+                /*else if (maxChildValue == value && Random.Range(0,1f) <= .30)
                 {
                     maxChild = i;
                 }
                 else if(maxChildValue >2 && Random.Range(0, 1f) > .98)
                 {
                     maxChild = i;
-                }
+                }*/
+               
             }
-            Debug.Log(maxChildValue);
+           
             return availableMoves[maxChild];
         }
        
@@ -38,8 +39,8 @@ public class NegaMaxAI : AIScript {
         bool completed = IsGameCompleted(node);
         if(depth == 0 || completed) {
             int evaluation = EvaluationFunction(node, color, completed);
-            Debug.Log("evaluation of following board by player " + color + " with score of " + evaluation + " board: ");
-            printBoard(node);
+           
+            
             return color == this.color ? evaluation : -evaluation;
         }
         BoardSpace[][][] children = GetChildrenNodes(node, color == BoardSpace.BLACK ? BoardSpace.WHITE : BoardSpace.BLACK);
@@ -48,6 +49,7 @@ public class NegaMaxAI : AIScript {
             value = Mathf.Max(value, -NegaMax(child, depth - 1, -beta, -alpha, color == BoardSpace.BLACK ? BoardSpace.WHITE : BoardSpace.BLACK));
             alpha = Mathf.Max(alpha, value);
             if(alpha >= beta) {
+                
                 break;
             }
         }
@@ -106,7 +108,7 @@ public class NegaMaxAI : AIScript {
         {
             foreach (BoardSpace space in row)
             {
-                if (space == color)
+                if (space == this.color)
                 {
                     totalDifference++;
                 }
@@ -116,7 +118,7 @@ public class NegaMaxAI : AIScript {
                 }
             }
         }// weighting corner pieces greater
-        if (currentBoard[0][0] == color)
+        if (currentBoard[0][0] == this.color)
         {
             totalDifference += 7;
         }
@@ -124,7 +126,7 @@ public class NegaMaxAI : AIScript {
         {
             totalDifference -= 7;
         }
-        if (currentBoard[7][0] == color)
+        if (currentBoard[7][0] == this.color)
         {
             totalDifference += 7;
         }
@@ -132,7 +134,7 @@ public class NegaMaxAI : AIScript {
         {
             totalDifference -= 7;
         }
-        if (currentBoard[7][7] == color)
+        if (currentBoard[7][7] == this.color)
         {
             totalDifference += 7;
         }
@@ -140,7 +142,7 @@ public class NegaMaxAI : AIScript {
         {
             totalDifference -= 7;
         }
-        if (currentBoard[0][7] == color)
+        if (currentBoard[0][7] == this.color)
         {
             totalDifference += 7;
         }

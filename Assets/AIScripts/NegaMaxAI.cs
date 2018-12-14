@@ -14,7 +14,7 @@ public class NegaMaxAI : AIScript {
             int[] possibleMoveScores = new int[possibleMoves.Length];
             
             for (int i = 0; i < possibleMoves.Length; ++i) {
-                possibleMoveScores[i] = NegaMax(possibleMoves[1], DEPTH, int.MinValue, int.MaxValue, this.color);          
+                possibleMoveScores[i] = NegaMax(possibleMoves[i], DEPTH, int.MinValue, int.MaxValue, this.color);          
             }
             int maxChild = 0;
             for(int i = 1; i < possibleMoves.Length; ++i) {

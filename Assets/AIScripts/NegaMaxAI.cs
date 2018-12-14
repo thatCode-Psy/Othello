@@ -18,6 +18,14 @@ public class NegaMaxAI : AIScript {
                     maxChildValue = value;
                     maxChild = i;
                 }
+                else if (maxChildValue == value && Random.Range(0,1f) <= .30)
+                {
+                    maxChild = i;
+                }
+                else if(maxChildValue >2 && Random.Range(0, 1f) > .98)
+                {
+                    maxChild = i;
+                }
             }
             Debug.Log(maxChildValue);
             return availableMoves[maxChild];

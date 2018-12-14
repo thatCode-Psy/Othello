@@ -13,5 +13,3 @@ There is also a NegamaxEval function that uses a less optimized version of negam
 
 These can be toggled as well as if it is human or AI on the board.
 
-In order to improve our function's win percentage, we included the ability for the function to find the move with 
-the maximum number of states that give it an advantage rather than the single best state.

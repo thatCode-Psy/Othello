@@ -9,26 +9,31 @@ public class NegaMaxAI : AIScript {
     public override KeyValuePair<int, int> makeMove(List<KeyValuePair<int, int>> availableMoves, BoardSpace[][] currentBoard) {
 
         BoardSpace[][][] possibleMoves = GetChildrenNodes(currentBoard, this.color);
+        
         if (possibleMoves.Length > 0) {
-            int maxChild = 0;
-            int maxChildValue = NegaMax(possibleMoves[0], DEPTH, int.MinValue, int.MaxValue, this.color);
-            for (int i = 1; i < possibleMoves.Length; ++i) {
-                int value = NegaMax(possibleMoves[1], DEPTH, int.MinValue, int.MaxValue, this.color);
-                if(value > maxChildValue) {
-                    maxChildValue = value;
-                    maxChild = i;
-                }
-                /*else if (maxChildValue == value && Random.Range(0,1f) <= .30)
-                {
-                    maxChild = i;
-                }
-                else if(maxChildValue >2 && Random.Range(0, 1f) > .98)
-                {
-                    maxChild = i;
-                }*/
-               
+            int[] possibleMoveScores = new int[possibleMoves.Length];
+            
+            for (int i = 0; i < possibleMoves.Length; ++i) {
+                possibleMoveScores[i] = NegaMax(possibleMoves[1], DEPTH, int.MinValue, int.MaxValue, this.color);          
             }
-           
+            int maxChild = 0;
+            for(int i = 1; i < possibleMoves.Length; ++i) {
+                if(possibleMoveScores[maxChild] < possibleMoveScores[i]) {
+                    maxChild = i;
+                }
+            }
+
+            int chance = Random.Range(0, 10);
+            if(chance < 3 && possibleMoveScores.Length > 1) {
+                int secondBestChild = maxChild == 0 ? 1 : 0;
+                for(int i = 1; i < possibleMoves.Length; ++i) {
+                    if(i != maxChild && possibleMoveScores[secondBestChild] < possibleMoveScores[i]) {
+                        secondBestChild = i;
+                    }
+                }
+                return availableMoves[secondBestChild];
+            }
+
             return availableMoves[maxChild];
         }
        

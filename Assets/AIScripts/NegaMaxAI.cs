@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NegaMaxAI : AIScript {
 
-    public const int DEPTH = 2;
+    public const int DEPTH = 3;
 
     public override KeyValuePair<int, int> makeMove(List<KeyValuePair<int, int>> availableMoves, BoardSpace[][] currentBoard) {
 
@@ -19,7 +19,7 @@ public class NegaMaxAI : AIScript {
                     maxChild = i;
                 }
             }
-            //Debug.Log(maxChildValue);
+            Debug.Log(maxChildValue);
             return availableMoves[maxChild];
         }
        
@@ -30,6 +30,8 @@ public class NegaMaxAI : AIScript {
         bool completed = IsGameCompleted(node);
         if(depth == 0 || completed) {
             int evaluation = EvaluationFunction(node, color, completed);
+            Debug.Log("evaluation of following board by player " + color + " with score of " + evaluation + " board: ");
+            printBoard(node);
             return color == this.color ? evaluation : -evaluation;
         }
         BoardSpace[][][] children = GetChildrenNodes(node, color == BoardSpace.BLACK ? BoardSpace.WHITE : BoardSpace.BLACK);
@@ -112,7 +114,7 @@ public class NegaMaxAI : AIScript {
         }
         else if (currentBoard[0][0] != BoardSpace.EMPTY)
         {
-            totalDifference -= 8;
+            totalDifference -= 7;
         }
         if (currentBoard[7][0] == color)
         {
@@ -120,7 +122,7 @@ public class NegaMaxAI : AIScript {
         }
         else if (currentBoard[7][0] != BoardSpace.EMPTY)
         {
-            totalDifference -= 8;
+            totalDifference -= 7;
         }
         if (currentBoard[7][7] == color)
         {
@@ -128,7 +130,7 @@ public class NegaMaxAI : AIScript {
         }
         else if (currentBoard[7][7] != BoardSpace.EMPTY)
         {
-            totalDifference -= 8;
+            totalDifference -= 7;
         }
         if (currentBoard[0][7] == color)
         {
@@ -136,19 +138,33 @@ public class NegaMaxAI : AIScript {
         }
         else if (currentBoard[0][7] != BoardSpace.EMPTY)
         {
-            totalDifference -= 8;
+            totalDifference -= 7;
         }
-        /*
-        if (isGameCompleted) {
-            if(totalDifference > 0) {
-                return int.MaxValue;
-            }
-            if(totalDifference < 0) {
-                return int.MinValue;
-            }
-        }
-        */
+        
         return totalDifference;
+    }
+
+    void printBoard(BoardSpace[][] board) {
+        string output = "";
+        foreach (BoardSpace[] row in board) {
+            string rowString = "";
+            foreach(BoardSpace tile in row) {
+                switch (tile) {
+                    case BoardSpace.BLACK:
+                        rowString += "B";
+                        break;
+                    case BoardSpace.WHITE:
+                        rowString += "W";
+                        break;
+                    default:
+                        rowString += "E";
+                        break;
+                }
+            }
+            output += rowString + "\n";
+            
+        }
+        Debug.Log(output);
     }
     
 }

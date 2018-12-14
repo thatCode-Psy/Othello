@@ -120,35 +120,35 @@ public class NegaMaxAI : AIScript {
         }// weighting corner pieces greater
         if (currentBoard[0][0] == this.color)
         {
-            totalDifference += 7;
+            totalDifference += 11;
         }
         else if (currentBoard[0][0] != BoardSpace.EMPTY)
         {
-            totalDifference -= 7;
+            totalDifference -= 11;
         }
         if (currentBoard[7][0] == this.color)
         {
-            totalDifference += 7;
+            totalDifference += 11;
         }
         else if (currentBoard[7][0] != BoardSpace.EMPTY)
         {
-            totalDifference -= 7;
+            totalDifference -= 11;
         }
         if (currentBoard[7][7] == this.color)
         {
-            totalDifference += 7;
+            totalDifference += 11;
         }
         else if (currentBoard[7][7] != BoardSpace.EMPTY)
         {
-            totalDifference -= 7;
+            totalDifference -= 11;
         }
         if (currentBoard[0][7] == this.color)
         {
-            totalDifference += 7;
+            totalDifference += 11;
         }
         else if (currentBoard[0][7] != BoardSpace.EMPTY)
         {
-            totalDifference -= 7;
+            totalDifference -= 11;
         }
         
         return totalDifference;

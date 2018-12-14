@@ -49,6 +49,10 @@ public class NegaMaxAI : AIScript {
             return color == this.color ? evaluation : -evaluation;
         }
         BoardSpace[][][] children = GetChildrenNodes(node, color == BoardSpace.BLACK ? BoardSpace.WHITE : BoardSpace.BLACK);
+        if(children.Length == 0) {
+            return -NegaMax(node, depth, -beta, -alpha, color == BoardSpace.BLACK ? BoardSpace.WHITE : BoardSpace.BLACK);
+        }
+
         int value = int.MinValue;
         foreach(BoardSpace[][] child in children) {
             value = Mathf.Max(value, -NegaMax(child, depth - 1, -beta, -alpha, color == BoardSpace.BLACK ? BoardSpace.WHITE : BoardSpace.BLACK));

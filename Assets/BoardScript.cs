@@ -36,6 +36,7 @@ public class BoardScript : MonoBehaviour {
     List<GameObject> possibleMovesArray;
     bool posMovesShown;
     void Awake() {
+        //determines which side is player
         possibleMovesArray = new List<GameObject>();
         if (isPlayerOneAI) {
             System.Type scriptType = System.Reflection.Assembly.GetExecutingAssembly().GetType(playerOneScriptClassName);
@@ -82,7 +83,7 @@ public class BoardScript : MonoBehaviour {
                 PlacePiece(move.Value, move.Key);
 
             } else {
-                if (!posMovesShown)
+                if (!posMovesShown)//shows potential moves for player character
                 {
                     foreach (KeyValuePair<int, int> a in currentValidMoves)
                     {
@@ -117,7 +118,7 @@ public class BoardScript : MonoBehaviour {
 
     }
 
-    private void InitBoard() {
+    private void InitBoard() { //set up board
         board = new BoardSpace[8][];
         boardGameObjects = new GameObject[8][];
         turnNumber = 0;
@@ -143,7 +144,7 @@ public class BoardScript : MonoBehaviour {
     public void restartGame() {
         SceneManager.LoadScene(0);
     }
-    public void PlacePiece(int x, int y) {
+    public void PlacePiece(int x, int y) { //instantiate piece at position and add to that sides points
         GameObject piece = Instantiate(piecePrefab, transform);
         SpriteRenderer spriteR = piece.GetComponent<SpriteRenderer>();
         piece.transform.localPosition = new Vector3((float)x - 3.5f, (float)y - 3.5f, 0f);
@@ -198,6 +199,7 @@ public class BoardScript : MonoBehaviour {
     }
 
     public static List<KeyValuePair<int, int>> GetPointsChangedFromMove(BoardSpace[][] board, uint turnNumber, int x, int y) {
+        //determines how much a move changed the overall point value
         BoardSpace enemyColor = turnNumber % 2 == 0 ? BoardSpace.WHITE : BoardSpace.BLACK;
         BoardSpace ourColor = turnNumber % 2 == 0 ? BoardSpace.BLACK : BoardSpace.WHITE;
         if (board.Length != 8 || board[0].Length != 8 || y < 0 || y >= 8 || x < 0 || x >= 8 || board[y][x] != ourColor) {
@@ -233,6 +235,7 @@ public class BoardScript : MonoBehaviour {
         if(board.Length != 8 || board[0].Length != 8) {
             return null;
         }
+        //determines the places that either player can move
         List<KeyValuePair<int, int>> possibleMoves = new List<KeyValuePair<int, int>>();
 
         for(int i = 0; i < 8; ++i) {

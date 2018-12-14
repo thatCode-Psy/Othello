@@ -41,7 +41,7 @@ public class NegaMaxAI : AIScript {
     }
 
     int NegaMax(BoardSpace[][] node, int depth, int alpha, int beta, BoardSpace color) {
-        bool completed = IsGameCompleted(node);
+        bool completed = IsGameCompleted(node);  //call evaluation function recursively
         if(depth == 0 || completed) {
             int evaluation = EvaluationFunction(node, color, completed);
            
@@ -66,7 +66,7 @@ public class NegaMaxAI : AIScript {
     }
 
 
-    BoardSpace[][][] GetChildrenNodes(BoardSpace[][] node, BoardSpace color) {
+    BoardSpace[][][] GetChildrenNodes(BoardSpace[][] node, BoardSpace color) { // find all the nodes that are children of this one
         List<KeyValuePair<int, int>> validMoves = BoardScript.GetValidMoves(node, color == BoardSpace.BLACK ? 0u : 1u);
         BoardSpace[][][] childrenNodes = new BoardSpace[validMoves.Count][][];
 
@@ -105,7 +105,7 @@ public class NegaMaxAI : AIScript {
         return copy;
     }
 
-
+    //determines if theres no more valid possible moves for either player
     bool IsGameCompleted(BoardSpace[][] node) {
         return BoardScript.GetValidMoves(node, 0).Count == 0 && BoardScript.GetValidMoves(node, 1).Count == 0;
     }
@@ -114,7 +114,7 @@ public class NegaMaxAI : AIScript {
     {
         int totalDifference = 0;
         foreach (BoardSpace[] row in currentBoard)
-        {
+        {// add points for same color and subtract for opposite
             foreach (BoardSpace space in row)
             {
                 if (space == this.color)
